@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
 using System.IO;
 
 namespace Squeal
