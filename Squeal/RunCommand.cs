@@ -23,9 +23,17 @@ namespace Squeal
             var configPath = Path.Combine(basePath, "squeal.json");
             var scriptDir = Path.Combine(basePath, "scripts");
 
-            if (!File.Exists(configPath))
+            SquealConfig config = null;
+            if(File.Exists(configPath))
             {
-                console.Error.WriteLine("Squeal config not found. Specify a squeal base dir using the --path option.");
+                config = JsonConvert.DeserializeObject<SquealConfig>(File.ReadAllText(configPath));
+            }
+
+            var connectionString = Parent.ConnectionString ?? config?.ConnectionString;
+
+            if (String.IsNullOrEmpty(connectionString))
+            {
+                console.Error.WriteLine("Connection string not set. Use --connection-string option or set ConnectionString property in squeal.json.");
                 return -1;
             }
 
@@ -36,9 +44,7 @@ namespace Squeal
                 return -1;
             }
 
-            var config = JsonConvert.DeserializeObject<SquealConfig>(File.ReadAllText(configPath));
-
-            using (var conn = new SqlConnection(config.ConnectionString))
+            using (var conn = new SqlConnection(connectionString))
             {
                 console.WriteLine($"Executing script {ScriptName}...");
                 conn.Open();

@@ -12,6 +12,9 @@ namespace Squeal
         [DirectoryExists]
         public string Path { get; set; } = Directory.GetCurrentDirectory();
 
+        [Option("--connection-string <connString>", Description = "The connection string (overrides squeal.json)", Inherited = true)]
+        public string ConnectionString { get; set; }
+
         protected override int ExecuteCommand(CommandLineApplication app, IConsole console)
         {
             // this shows help even if the --help option isn't specified

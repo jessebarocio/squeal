@@ -7,7 +7,12 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>squeal</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageId>squeal</PackageId>
+    <PackageProjectUrl>https://github.com/jessebarocio/squeal</PackageProjectUrl>
+    <Description>A .NET tool used to run SQL Server database migrations and scripts during deployments.</Description>
+    <Authors>jessebarocio</Authors>
   </PropertyGroup>
 
   <ItemGroup>

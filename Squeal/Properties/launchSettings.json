@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Squeal": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "up --path c:\\temp\\squealpath"
     }
   }
 }
