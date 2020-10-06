@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 
 namespace Squeal
 {
@@ -16,10 +17,13 @@ namespace Squeal
         [Required]
         public string ScriptName { get; set; }
 
+        [Option("-p|--parameter", CommandOptionType.MultipleValue,
+            Description = "Pass a parameter to the script. Format: PARAM=VALUE, Replaces ${PARAM} in the script.")]
+        public string[] Parameters { get; set; }
+
         protected override int ExecuteCommand(CommandLineApplication app, IConsole console)
         {
             string basePath = Parent.Path;
-            var configPath = Path.Combine(basePath, "squeal.json");
             var scriptDir = Path.Combine(basePath, "scripts");
 
             var config = SquealConfig.GetConfig(Parent);
@@ -47,7 +51,13 @@ namespace Squeal
                 {
                     try
                     {
-                        var rows = conn.Execute(File.ReadAllText(scriptPath), transaction: trans);
+                        var template = File.ReadAllText(scriptPath);
+                        var ps = Parameters.Select(p => p.Split("=")).ToDictionary(k => k[0], v => v[1]);
+                        foreach (var key in ps.Keys)
+                        {
+                            template = template.Replace("${" + key + "}", ps[key]);
+                        }
+                        var rows = conn.Execute(template, transaction: trans);
                         console.WriteLine($"{rows} rows affected.");
                         trans.Commit();
                     }
