@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -23,13 +22,9 @@ namespace Squeal
             var configPath = Path.Combine(basePath, "squeal.json");
             var scriptDir = Path.Combine(basePath, "scripts");
 
-            SquealConfig config = null;
-            if(File.Exists(configPath))
-            {
-                config = JsonConvert.DeserializeObject<SquealConfig>(File.ReadAllText(configPath));
-            }
+            var config = SquealConfig.GetConfig(Parent);
 
-            var connectionString = Parent.ConnectionString ?? config?.ConnectionString;
+            var connectionString = config.ConnectionString;
 
             if (String.IsNullOrEmpty(connectionString))
             {
@@ -44,7 +39,7 @@ namespace Squeal
                 return -1;
             }
 
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = ConnectionFactory.CreateConnection(config))
             {
                 console.WriteLine($"Executing script {ScriptName}...");
                 conn.Open();

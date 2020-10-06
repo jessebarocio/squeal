@@ -1,7 +1,5 @@
 ﻿using Dapper;
 using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,16 +17,11 @@ namespace Squeal
         protected override int ExecuteCommand(CommandLineApplication app, IConsole console)
         {
             string basePath = Parent.Path;
-            var configPath = Path.Combine(basePath, "squeal.json");
             var migrationDir = Path.Combine(basePath, "migrations");
 
-            SquealConfig config = null;
-            if (File.Exists(configPath))
-            {
-                config = JsonConvert.DeserializeObject<SquealConfig>(File.ReadAllText(configPath));
-            }
+            var config = SquealConfig.GetConfig(Parent);
 
-            var connectionString = Parent.ConnectionString ?? config?.ConnectionString;
+            var connectionString = config.ConnectionString;
 
             if (String.IsNullOrEmpty(connectionString))
             {
@@ -36,7 +29,7 @@ namespace Squeal
                 return -1;
             }
 
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = ConnectionFactory.CreateConnection(config))
             {
                 conn.Open();
                 // Create metadata table if it doesn't exist

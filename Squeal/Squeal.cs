@@ -12,8 +12,24 @@ namespace Squeal
         [DirectoryExists]
         public string Path { get; set; } = Directory.GetCurrentDirectory();
 
-        [Option("--connection-string <connString>", Description = "The connection string (overrides squeal.json)", Inherited = true)]
+        [Option("--connection-string <connString>", Description = "The connection string. Overrides squeal.json", 
+            Inherited = true)]
         public string ConnectionString { get; set; }
+
+        [Option("--aad-tenant-id <tenantId>", 
+            Description = "The Azure AD Tenant (used for Service Principal authentication). Overrides squeal.json", 
+            Inherited = true)]
+        public string AzureAdTenantId { get; set; }
+
+        [Option("--aad-client-id <clientId>", 
+            Description = "The Azure AD ClientId (used for Service Principal authentication). Overrides squeal.json", 
+            Inherited = true)]
+        public string AzureAdClientId { get; set; }
+
+        [Option("--aad-client-secret <secret>", 
+            Description = "The Azure AD ClientId (used for Service Principal authentication). Overrides squeal.json", 
+            Inherited = true)]
+        public string AzureAdClientSecret { get; set; }
 
         protected override int ExecuteCommand(CommandLineApplication app, IConsole console)
         {
