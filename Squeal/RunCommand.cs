@@ -19,7 +19,7 @@ namespace Squeal
 
         [Option("-p|--parameter", CommandOptionType.MultipleValue,
             Description = "Pass a parameter to the script. Format: PARAM=VALUE, Replaces ${PARAM} in the script.")]
-        public string[] Parameters { get; set; }
+        public string[] Parameters { get; set; } = new string[] { };
 
         protected override int ExecuteCommand(CommandLineApplication app, IConsole console)
         {

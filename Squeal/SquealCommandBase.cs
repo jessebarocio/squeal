@@ -26,7 +26,7 @@ namespace Squeal
                 console.WriteLine();
                 return ExecuteCommand(app, console);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 console.WriteLine("Unhandled exception!");
                 throw;
